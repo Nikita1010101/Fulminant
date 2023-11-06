@@ -1,12 +1,16 @@
-import { ComponentState } from '../../state/states/component.state'
-import { StyleState } from '../../state/states/style.state'
+import { ComponentState } from '../../state/component/component.state'
+import { StyleState } from '../../state/style/style.state'
+import { TypeStateComponent, TypeStateStyle } from '../../types/state.type'
 import { TypeCreateComponent } from '../../types/component.type'
-import { LocalState } from '../helper/local-state.class'
+import { DataConstructor } from '../helper/data-constructor'
 
-/**
- * @class
- * @classdesc Class for creating the component
- */
+/** @satisfies { TypeStateComponent } */
+const componentState = new ComponentState()
+/** @satisfies { TypeStateStyle } */
+const styleState = new StyleState()
+const dataConstructor = new DataConstructor()
+
+/** @class @classdesc - Class for creating the component */
 export class Component {
 	/**
 	 * @constructor
@@ -18,16 +22,12 @@ export class Component {
 	 * @param { TypeCreateComponent } componentData
 	 * @returns { void }
 	 */
-	define({ name, template, styles, page, props }) {
-		const style = new StyleState()
+	define({ name, template, styles, data, props, page, memoization }) {
+		const localTemplate = dataConstructor.addTemplatePrefix(template, name)
+		const localStyles = dataConstructor.addStylesPrefix(styles, name)
 
-		const localTemplate = LocalState.addTemplatePrefix(template, name)
-		const localStyles = LocalState.addStylesPrefix(styles, name)
-		// LocalState.findEvents(name, template)
-
-		style.getValue('styles')
-			? style.addValue('styles', localStyles)
-			: style.setValue('styles', [localStyles])
+		componentState.setValue(name, { template: localTemplate, data, page })
+		styleState.setValue('styles', localStyles)
 
 		class Element extends HTMLElement {
 			constructor() {
@@ -38,7 +38,6 @@ export class Component {
 				this.innerHTML = localTemplate
 
 				if (page) {
-					const componentState = new ComponentState()
 				}
 			}
 
@@ -49,9 +48,4 @@ export class Component {
 
 		customElements.define(name, Element)
 	}
-
-	/**
-	 * @param { () => void } scriptsFn - Function for scripts of component
-	 */
-	scripts(scriptsFn) {}
 }

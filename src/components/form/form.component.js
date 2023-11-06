@@ -12,5 +12,3 @@ component.define({
 	props: [],
 	memoization: true
 })
-
-component.scripts(() => {})

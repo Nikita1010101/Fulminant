@@ -97,26 +97,8 @@ module.exports = {
 			{
 				test: /\.s(a|c)ss$/i,
 				use: [
-					// devMode ? 'style-loader' : MiniCssExterctPlugin.loader,
-					// 'css-loader',
-					// {
-					// 	loader: 'postcss-loader',
-					// 	options: {
-					// 		postcssOptions: {
-					// 			plugins: [PostcssPresetEnv()]
-					// 		}
-					// 	}
-					// },
 					'sass-to-string',
 					"sass-loader",
-					// {
-          //   options: {
-          //     sassOptions: {
-          //       outputStyle: "compressed",
-          //     },
-          //   },
-          // },
-					// 'resolve-url-loader',
 				]
 			},
 			{

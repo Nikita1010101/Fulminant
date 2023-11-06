@@ -1,4 +1,6 @@
+/** @class @classdesc -  */
 class FtFor extends HTMLElement {
+	/** @constructor */
 	constructor() {
 		super()
 	}

@@ -1,18 +1,16 @@
-import { PageState } from '../../state/states/page.state'
+import { PageState } from '../../state/page/page.state'
 import { TypeStatePage } from '../../types/state.type'
 import { TypePageParams, TypePrivatePageParams } from '../../types/router.type'
-import { StyleState } from '../../state/states/style.state'
+import { StyleState } from '../../state/style/style.state'
+
+/** @satisfies { TypeStatePage } */
+const state = new PageState()
 
 /**
  * @class
  * @classdesc - App router
  */
 export class Router {
-	/**
-	 * @satisfies { TypeStatePage }
-	 */
-	#state = new PageState()
-
 	/**
 	 * @constructor
 	 */
@@ -28,7 +26,9 @@ export class Router {
 		styles.textContent = style.getValue('styles').join('\n')
 		document.body.appendChild(styles)
 		const app = document.getElementById('app')
-		const page = this.#state.getValue(path)
+		const page = state.getValue(path)
+
+		console.log(page.component, page.component.innerHTML)
 
 		if (!page) {
 			app.innerHTML += '<h1>Page is no found!!!</h1>'
@@ -60,7 +60,7 @@ export class Router {
 			component
 		}
 
-		this.#state.setValue(path, page)
+		state.setValue(path, page)
 	}
 
 	/**
@@ -77,7 +77,7 @@ export class Router {
 			middleware
 		}
 
-		this.#state.setValue(path, page)
+		state.setValue(path, page)
 	}
 
 	/**

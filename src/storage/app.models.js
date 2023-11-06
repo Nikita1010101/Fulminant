@@ -1,4 +1,4 @@
-import { ModelState } from '../../core/state/states/model.state'
+import { ModelState } from '../../core/state/model/model.state'
 
 const modelState = new ModelState()
 

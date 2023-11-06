@@ -1,50 +1,24 @@
-export class VirtualDOM {
-	constructor() {
-		this.markup = {
-			tag: 'div',
-			props: [
-				{
-					name: 'id',
-					value: 'main'
-				},
-				{
-					name: 'class',
-					value: 'main'
-				}
-			],
-			children: [
-				{
-					tag: 'h1',
-					props: [
-						{
-							name: 'click',
-							value: '@show()'
-						}
-					],
-					children: 'Hello World!!!'
-				},
-				{
-					tag: 'p',
-					props: [],
-					children: []
-				},
-				{
-					tag: 'my-el',
-					props: [],
-					children: []
-				}
-			]
-		}
-	}
+import { DOMConstructor } from '../helper/dom-constructor'
 
-	
+const domConstructor = new DOMConstructor()
 
-	createVDOM(node) {
+/** @class @classdesc - Virtual Document Object Model */
+export class VirtualDOM {/** @constructor */
+	constructor() {}
+
+	/**
+	 *
+	 * @param { Node } component
+	 * @returns { Object } #########
+	 */
+	createVDOM(component) {
 		const element = {
 			tag: '',
 			props: [],
 			children: []
 		}
+
+		const node = domConstructor.createNode(component.tagName) || component
 
 		element.tag = node.tagName
 
@@ -61,8 +35,7 @@ export class VirtualDOM {
 				const children = this.createVDOM(childNode)
 				element.children.push(children)
 			}
-		}
-		else {
+		} else {
 			element.children = node.textContent
 		}
 
@@ -70,17 +43,30 @@ export class VirtualDOM {
 	}
 
 	mount(markup) {
-		function print() {
-			alert('event is working)))!!!')
-		}
+		// for (let i = 0; i < markup.props.length; i++) {
+		// 	if (
+		// 		markup.props[i].name == 'id' &&
+		// 		markup.tag == 'div' &&
+		// 		/\w+-\w+/.test(markup.props[i].value)
+		// 	) {
+		// 		console.log(this.#components, 'addition')
+		// 		this.#components.push(markup.props[i].value)
+		// 	}
+		// }
+
+		// console.log(this.#components)
 
 		const element = document.createElement(markup.tag)
 
 		for (let i = 0; i < markup.props.length; i++) {
-			const isEvent = /[@#]\w+\(\)/.test(markup.props[i].value)
+			const isEvent = /\w+\(\)/.test(markup.props[i].value)
 
 			if (isEvent) {
-				element.addEventListener(markup.props[i].name, print)
+				// console.log('123',this.#components)
+				// const componentName = this.#components[this.#components.length - 1]
+				// console.log('1', componentName)
+				const event = domConstructor.getEvent(componentName, markup.props[i].value)
+				element.addEventListener(markup.props[i].name, event)
 				continue
 			}
 
@@ -95,6 +81,8 @@ export class VirtualDOM {
 				element.appendChild(child)
 			}
 		}
+
+		// this.#components.pop()
 
 		return element
 	}
