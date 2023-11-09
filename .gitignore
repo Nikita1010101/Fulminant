@@ -1,0 +1,17 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# build
+/dist
+
+# dependencies
+/node_modules
+
+# debug
+yarn-error.log*
+
+# local env files
+.env*.local
+.env 
+
+# text files
+*.txt
